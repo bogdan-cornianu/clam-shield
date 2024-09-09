@@ -72,7 +72,7 @@ export function scanFile(enginePtr: Buffer, filePath: string, maxSizeMB: number)
 }
 
 // Scan a directory recursively with a callback
-export function scanDirectory(enginePtr: Buffer, dirPath: string, maxSizeMB: number, callback: (filePath: string, status: string) => void): void {
+export function scanDirectory(enginePtr: Buffer, dirPath: string, maxSizeMB: number, callback: (filePath: string, status: string, virusName: string) => void): void {
     // Read the directory contents
     const entries = fs.readdirSync(dirPath, { withFileTypes: true });
 
@@ -86,12 +86,12 @@ export function scanDirectory(enginePtr: Buffer, dirPath: string, maxSizeMB: num
             try {
                 const virusName = scanFile(enginePtr, fullPath, maxSizeMB);
                 if (virusName) {
-                    callback(fullPath, `Infected with ${virusName}`);
+                    callback(fullPath, 'Infected', `${virusName}`);
                 } else {
-                    callback(fullPath, 'OK');
+                    callback(fullPath, 'OK', 'CLEAN');
                 }
             } catch (error) {
-                callback(fullPath, `Error: ${error.message}`);
+                callback(fullPath, 'ERROR', `Error: ${error.message}`);
             }
         }
     }

@@ -1,5 +1,5 @@
 const { parentPort } = require('worker_threads');
-const clamavLib = require('./clamavlib');
+const clamavLib = require('../lib/clamavlib');
 
 let clamavEngine = null;
 
@@ -35,9 +35,9 @@ function performScan(filePath, maxSizeMB) {
         clamavLib.compileClamAVEngine(clamavEngine);
 
         const maxSizeMB = 10;
-        clamavLib.scanDirectory(clamavEngine, filePath, maxSizeMB, (filePath, status) => {
+        clamavLib.scanDirectory(clamavEngine, filePath, maxSizeMB, (filePath, status, virusName) => {
             console.log(`${filePath}: ${status}`);
-            parentPort.postMessage(`${filePath}: ${status}`);
+            parentPort.postMessage({ file: filePath, status: status, virus: virusName });
         });
 
         parentPort.postMessage({ status: 'scan-completed', message: 'Scan completed.' });

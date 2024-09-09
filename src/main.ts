@@ -23,6 +23,7 @@ const createWindow = (): void => {
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
+    autoHideMenuBar: true,
   });
 
   // and load the index.html of the app.
@@ -52,7 +53,7 @@ ipcMain.on('scan-directory', (event, filePath: string, maxSizeMB: number) => {
 });
 
 function startClamAVWorker() {
-    clamavWorker = new Worker('./src/clamavWorker.ts');
+    clamavWorker = new Worker('./src/workers/clamavWorker.ts');
 
     clamavWorker.on('message', (message) => {
         if (message.status === 'success') {

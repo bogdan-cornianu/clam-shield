@@ -16,7 +16,9 @@ export const mainConfig: Configuration = {
   plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
+    fallback: { "path": require.resolve("path-browserify") }
   },
+  target: 'electron-main',
   externals: [
     nodeExternals({
       allowlist: ['ffi-napi', 'ref-napi'], // Allow ffi-napi and ref-napi to be bundled
